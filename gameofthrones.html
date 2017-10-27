@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Game of Thrones Assignment</title>
+        <link rel="stylesheet" href="gameofthrones.css">
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+        <script>
+
+            $(document).ready(function(){
+                console.log("Document Ready");
+
+                $('#houses').on('click', 'img', function() {           
+
+                    $('#info').html("");   
+
+                    var house_num = $(this).attr('house');
+                    var house_path = "https://anapioficeandfire.com/api/houses/" + house_num;
+                    // var stark_path = "https://anapioficeandfire.com/api/houses/362";
+
+                    // if (house_num == 362){
+                    //     house_path = stark_path;
+                    // }
+                    
+                    console.log('set variables')
+                    console.log(house_path);
+                    // console.log(stark_path);
+                    
+                    $.get(house_path, function(res){
+                        console.log("path worked")
+                        console.log(res);
+
+                        $('#info').append('<h3>Name</h3>');
+                        var name_show = res.name;
+                        $('#info').append('<p>' + name_show + '</p>');
+
+                        $('#info').append('<h3>Words</h3>');
+                        var words_show = res.words;
+                        $('#info').append('<p>' + words_show + '</p>');
+
+                        $('#info').append('<h3>Sigil</h3>');
+                        var sigil = res.coatOfArms;
+                        $('#info').append('<p>' + sigil + '</p>');
+
+
+                        $('#info').append('<h3>Titles</h3>');
+                        var title_show = res.titles;
+                        
+                        if (res.titles[0] !== undefined){
+                            $('#info').append('<ul></ul>');
+                            $('ul').append('<li id="title0">' + res.titles[0] + '</li>');
+                            if(res.titles > 1){
+                                for(var i = 1; i < res.titles; i++ ){
+                                    $('ul').append('<li id="title' + i + '">' + res.titles[i] + '</li>')
+                                };
+                            };
+                        };
+
+                    }, "json");
+                });
+            })
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <h1>Game of Thrones - House Information</h1>
+            <div id="houses">
+                <img src="gameofthrones/stark.jpg" id="stark" house="362" alt="House Stark">
+                <img src="gameofthrones/targaryen.jpg" id="targaryen" house="378" alt="House Targaryen">
+                <img src="gameofthrones/lannister.jpg" id="lannister" house="229" alt="House Lannister">
+                <img src="gameofthrones/baratheon.png" id="baratheon" house="17" alt="House Baratheon">
+            </div>
+            <h2>House Details</h2>
+            <div id="info"></div>
+        </div>
+    </body>
+</html>
+
